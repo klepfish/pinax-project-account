@@ -1,11 +1,17 @@
 import os
-
+import djcelery
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+BROKER_HOST = "127.0.0.1"
+BROKER_PORT = 5672
+BROKER_VHOST = "/"
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
 
 ADMINS = [
     # ("Your Name", "your_email@example.com"),
@@ -138,6 +144,8 @@ INSTALLED_APPS = [
     # external
     "account",
     "metron",
+    "south",
+    "djcelery",
     
     # project
 ]
