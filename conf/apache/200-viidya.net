@@ -1,0 +1,32 @@
+<VirtualHost *:80>
+    ServerAdmin root@viidya.net
+    ServerName viidya.net
+    ServerSignature Off
+
+    Alias /static/ /srv/viidya/app/webapp/site_media/static/
+    Alias /robots.txt /srv/viidya/app/webapp/static/robots.txt
+    Alias /favicon.ico /srv/viidya/app/webapp/static/favicon.ico
+
+    SetEnvIf User_Agent "monit/*" dontlog
+    CustomLog "|/usr/sbin/rotatelogs /srv/viidya/logs/access.log.%Y%m%d-%H%M 5M" combined env=!dontlog
+    ErrorLog "|/usr/sbin/rotatelogs /srv/viidya/logs/error.log.%Y%m%d-%H%M 5M"
+    LogLevel warn
+
+    WSGIScriptAlias / /srv/viidya/app/webapp/wsgi.py
+
+    WSGIDaemonProcess viidya.net user=viidya group=viidya processes=2 threads=10 maximum-requests=10000 display-name=%{GROUP} python-path=/srv/viidya/app:/srv/viidya/venv/lib/python2.7/site-packages python-eggs=/srv/viidya/run/eggs
+    WSGIProcessGroup viidya.net
+    WSGIScriptAlias / /srv/viidya/app/webapp/wsgi.py
+
+    <Directory /srv/viidya/app/webapp/static>
+        Order deny,allow
+        Allow from all
+        Options -Indexes FollowSymLinks
+    </Directory>
+
+    <Directory /srv/viidya/app/conf/apache>
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+ </VirtualHost>
